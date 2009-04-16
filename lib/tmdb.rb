@@ -1,0 +1,11 @@
+require 'rubygems'
+require 'open-uri'
+require 'date'
+require 'xmlsimple'
+
+require File.dirname(__FILE__) + '/tmdb/optional_logger'
+require File.dirname(__FILE__) + '/tmdb/tmdb_movie'
+require File.dirname(__FILE__) + '/tmdb/tmdb_profile'
+require File.dirname(__FILE__) + '/string_extensions'
+require File.dirname(__FILE__) + '/file_extensions'
+require File.dirname(__FILE__) + '/object_extensions'

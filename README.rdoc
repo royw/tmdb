@@ -1,5 +1,7 @@
 = tmdb
 
+A helper library for accessing themovieDb.com.
+
 Description goes here.
 
 == Copyright
