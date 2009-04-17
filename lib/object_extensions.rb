@@ -1,19 +1,24 @@
 # == Synopsis
 # add a blank? method to all Objects
 class Object
-  # return asserted if object is nil or empty
-  # TODO: not the safest coding, probably should dup before stripping.  Maybe should also compact
-  def blank?
-    result = nil?
-    unless result
-      if respond_to? 'empty?'
-        if respond_to? 'strip'
-          result = strip.empty?
-        else
-          result = empty?
+  my_extension("blank?") do
+    # return asserted if object is nil or empty
+    def blank?
+      result = nil?
+      unless result
+        if respond_to? 'empty?'
+          if respond_to? 'strip'
+            result = strip.empty?
+          else
+            if respond_to? 'compact'
+              result = compact.empty?
+            else
+              result = empty?
+            end
+          end
         end
       end
+      result
     end
-    result
   end
 end
