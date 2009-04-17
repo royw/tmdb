@@ -4,6 +4,8 @@ require 'tempfile'
 # Time to add your specs!
 # http://rspec.info/
 
+TMDB_API_KEY = '7a2f6eb9b6aa01651000f0a9324db835'
+
 describe "TmdbProfile" do
 
   before(:all) do
@@ -12,7 +14,7 @@ describe "TmdbProfile" do
 
   before(:each) do
     # tt0465234 => National Treasure: Book of Secrets
-    @profile = TmdbProfile.first(:imdb_id => 'tt0465234')
+    @profile = TmdbProfile.first(:imdb_id => 'tt0465234', :api_key => TMDB_API_KEY)
   end
 
   after(:each) do
@@ -25,7 +27,7 @@ describe "TmdbProfile" do
 
   it "should save the profile to a file" do
     filespec = get_temp_filename
-    profile = TmdbProfile.first(:imdb_id => 'tt0465234', :filespec => filespec)
+    profile = TmdbProfile.first(:imdb_id => 'tt0465234', :api_key => TMDB_API_KEY, :filespec => filespec)
     (File.exist?(filespec).should be_true) && (File.size(filespec).should > 0)
   end
 
@@ -94,7 +96,7 @@ describe "TmdbProfile" do
   it "should be able to convert to xml and then from xml" do
     hash = nil
     begin
-      profile = TmdbProfile.first(:imdb_id => 'tt0465234')
+      profile = TmdbProfile.first(:imdb_id => 'tt0465234', :api_key => TMDB_API_KEY)
       xml = profile.to_xml
       hash = XmlSimple.xml_in(xml)
     rescue
@@ -106,26 +108,26 @@ describe "TmdbProfile" do
   # now let's test caching the profile to/from a file
 
   it "should not create a file if a :filespec option is passed that is nil" do
-    profile = TmdbProfile.first(:imdb_id => 'tt0465234', :filespec => nil)
+    profile = TmdbProfile.first(:imdb_id => 'tt0465234', :api_key => TMDB_API_KEY, :filespec => nil)
     Dir.glob(File.join(TMPDIR, "imdb_profile_spec*")).empty?.should be_true
   end
 
   it "should create a file if a :filespec option is passed" do
     filespec = get_temp_filename
-    profile = TmdbProfile.first(:imdb_id => 'tt0465234', :filespec => filespec)
+    profile = TmdbProfile.first(:imdb_id => 'tt0465234', :api_key => TMDB_API_KEY, :filespec => filespec)
     (File.exist?(filespec) && (File.size(filespec) > 0)).should be_true
   end
 
   it "should load from a file if a :filespec option is passed and the file exists" do
     filespec = get_temp_filename
-    profile1 = TmdbProfile.first(:imdb_id => 'tt0465234', :filespec => filespec)
-    profile2 = TmdbProfile.first(:filespec => filespec)
+    profile1 = TmdbProfile.first(:imdb_id => 'tt0465234', :api_key => TMDB_API_KEY, :filespec => filespec)
+    profile2 = TmdbProfile.first(:api_key => TMDB_API_KEY, :filespec => filespec)
     profile1.imdb_id.should == profile2.imdb_id
   end
 
   it "should not load from a file if a :filespec option is passed and the file does not exists" do
     filespec = get_temp_filename
-    profile = TmdbProfile.first(:filespec => filespec)
+    profile = TmdbProfile.first(:api_key => TMDB_API_KEY, :filespec => filespec)
     profile.should be_nil
   end
 

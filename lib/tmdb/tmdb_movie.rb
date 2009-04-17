@@ -2,11 +2,9 @@ class TmdbMovie
 
   attr_reader :query, :document
 
-  API_KEY = '7a2f6eb9b6aa01651000f0a9324db835'
-
-  def initialize(ident)
+  def initialize(ident, key)
     @imdb_id = 'tt' + ident.gsub(/^tt/, '') unless ident.blank?
-    @query = "http://api.themoviedb.org/2.0/Movie.imdbLookup?imdb_id=#{@imdb_id}&api_key=#{API_KEY}"
+    @query = "http://api.themoviedb.org/2.0/Movie.imdbLookup?imdb_id=#{@imdb_id}&api_key=#{key}"
   end
 
   def fanarts

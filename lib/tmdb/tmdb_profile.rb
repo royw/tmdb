@@ -14,12 +14,13 @@ class TmdbProfile
 
   # options:
   #  :imdb_id  => String (either with or without leading 'tt')
+  #  :api_key => String containing themovieDb.com's API key (required)
   #  :filespec => nil or a valid pathspec
   #  :logger   => nil or a logger instance
   def self.all(options={})
     result = []
     if has_option?(options, :imdb_id) || (has_option?(options, :filespec) && File.exist?(options[:filespec]))
-      result << TmdbProfile.new(options[:imdb_id], options[:filespec], options[:logger])
+      result << TmdbProfile.new(options[:imdb_id], options[:api_key], options[:filespec], options[:logger])
     end
     result
   end
@@ -35,8 +36,9 @@ class TmdbProfile
     options.has_key?(key) && !options[key].blank?
   end
 
-  def initialize(ident, filespec, logger)
+  def initialize(ident, key, filespec, logger)
     @imdb_id = ident
+    @api_key = key
     @filespec = filespec
     @logger = OptionalLogger.new(logger)
     load
@@ -65,7 +67,7 @@ class TmdbProfile
       @movie = from_xml(open(@filespec).read)
     elsif !@imdb_id.blank?
       @logger.debug { "loading movie from tmdb.com, filespec=> #{@filespec.inspect}" }
-      @movie = TmdbMovie.new(@imdb_id.gsub(/^tt/, '')).to_hash
+      @movie = TmdbMovie.new(@imdb_id.gsub(/^tt/, ''), @api_key).to_hash
       save(@filespec) unless @filespec.blank?
     end
     unless @movie.blank?
