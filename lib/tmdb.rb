@@ -1,11 +1,15 @@
+$:.unshift(File.dirname(__FILE__)) unless
+  $:.include?(File.dirname(__FILE__)) || $:.include?(File.expand_path(File.dirname(__FILE__)))
+
 require 'rubygems'
 require 'open-uri'
 require 'date'
 require 'xmlsimple'
 
-require File.dirname(__FILE__) + '/tmdb/optional_logger'
-require File.dirname(__FILE__) + '/tmdb/tmdb_movie'
-require File.dirname(__FILE__) + '/tmdb/tmdb_profile'
-require File.dirname(__FILE__) + '/string_extensions'
-require File.dirname(__FILE__) + '/file_extensions'
-require File.dirname(__FILE__) + '/object_extensions'
+require 'tmdb/optional_logger'
+require 'tmdb/tmdb_movie'
+require 'tmdb/tmdb_profile'
+require 'module_extensions'
+require 'string_extensions'
+require 'file_extensions'
+require 'object_extensions'
