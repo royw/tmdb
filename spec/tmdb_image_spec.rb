@@ -107,6 +107,19 @@ describe "TmdbImage" do
     (File.exist?(filespec).should be_true) && (File.size(filespec).should > 0)
   end
 
+  # these are a couple of white box tests to show a bug where
+  # src_url was nil but copy_image was trying to copy from it anyway.
+
+  it "should not attempt to copy if src_url is blank" do
+    dest_filespec = get_temp_filename
+    @image.send('copy_image', nil, dest_filespec).should be_nil
+  end
+
+  it "should not attempt to copy if dest_filespec is blank" do
+    src_url = @image.send('image_url', 'tt0465234', 'fanarts', 'original')
+    @image.send('copy_image', src_url, nil).should be_nil
+  end
+
   def get_temp_filename
     outfile = Tempfile.new('tmdb_image_spec', TMPDIR)
     filespec = outfile.path

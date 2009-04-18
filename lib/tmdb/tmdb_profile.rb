@@ -62,7 +62,7 @@ class TmdbProfile
 
   # return the TmdbImage for this profile
   def image
-    TmdbImage.new(@imdb_id.gsub(/^tt/, ''), @api_key, @logger) rescue nil
+    TmdbImage.new(@imdb_id.gsub(/^tt/, ''), @api_key, @logger, @filespec) rescue nil
   end
 
   protected

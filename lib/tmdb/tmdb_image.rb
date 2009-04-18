@@ -4,10 +4,11 @@ class TmdbImage
   # imdb_id => String IMDB ID either with or without the 'tt' prefix
   # api_key => String containing the themovieDb.com API key
   # logger => nil or logger instance
-  def initialize(ident, api_key, logger)
+  def initialize(ident, api_key, logger, filespec=nil)
     @imdb_id = 'tt' + ident.gsub(/^tt/, '') unless ident.blank?
     @api_key = api_key
     @logger = OptionalLogger.new(logger)
+    @filespec = filespec
   end
 
   # return an Array of fanart sizes as Strings
@@ -26,7 +27,7 @@ class TmdbImage
     src_url = nil
     if fanart_sizes.include?(size)
       src_url = image_url(@imdb_id, 'fanarts', size)
-      copy_image(src_url, dest_filespec) unless dest_filespec.nil?
+      copy_image(src_url, dest_filespec)
     end
     src_url
   end
@@ -37,7 +38,7 @@ class TmdbImage
     src_url = nil
     if poster_sizes.include?(size)
       src_url = image_url(@imdb_id, 'posters', size)
-      copy_image(src_url, dest_filespec) unless dest_filespec.nil?
+      copy_image(src_url, dest_filespec)
     end
     src_url
   end
@@ -92,7 +93,7 @@ class TmdbImage
   # size => member of either fanart_sizes or poster_sizes
   def image_url(imdb_id, type, size)
     src_url = nil
-    profile = TmdbProfile.first(:imdb_id => imdb_id, :api_key => @api_key, :filespec => nil, :logger => @logger)
+    profile = TmdbProfile.first(:imdb_id => imdb_id, :api_key => @api_key, :filespec => @filespec, :logger => @logger)
     indexes = {}
     unless profile.nil? || profile.movie.blank?
       movie = profile.movie
@@ -110,19 +111,29 @@ class TmdbImage
   end
 
   # download the fanart
+  # returns nil if no attempt to copy was made, 0 on error, or the image size in bytes on success
   def copy_image(src_url, dest_filespec)
-    begin
-      extension = File.extname(src_url)
-      unless extension.blank?
-        dest_filespec += extension
+    image_size = nil
+    unless src_url.blank? || dest_filespec.blank?
+      begin
+        image_size = 0
+        extension = File.extname(src_url)
+        unless extension.blank?
+          dest_filespec += extension
+        end
+        unless File.exist?(dest_filespec) && (File.size(dest_filespec) > 0)
+          @logger.info { "Downloading: #{src_url}" }
+          data = fetch(src_url.escape_unicode)
+          File.open(dest_filespec, 'w') do |file|
+            file.print(data)
+          end
+        end
+        image_size = File.size(dest_filespec)
+      rescue Exception => e
+        @logger.error { "Error fetching image.\n  src_url => #{src_url},\n  dest_filespec => #{dest_filespec}\n  #{e.to_s}" }
       end
-      data = fetch(src_url.escape_unicode)
-      File.open(dest_filespec, 'w') do |file|
-        file.print(data)
-      end
-    rescue Exception => e
-      @logger.error { "Error fetching image.\n  src_url => #{src_url},\n  dest_filespec => #{dest_filespec}\n  #{e.to_s}" }
     end
+    image_size
   end
 
   MAX_ATTEMPTS = 3
