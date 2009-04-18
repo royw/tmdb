@@ -49,6 +49,8 @@ class TmdbProfile
 
   attr_reader :imdb_id, :movie
 
+  # convert to xml
+  # returns String (either empty or containing the xml)
   def to_xml
     xml = ''
     unless @movie.blank?
@@ -56,6 +58,11 @@ class TmdbProfile
       xml = XmlSimple.xml_out(@movie, 'NoAttr' => true, 'RootName' => 'movie')
     end
     xml
+  end
+
+  # return the TmdbImage for this profile
+  def image
+    TmdbImage.new(@imdb_id.gsub(/^tt/, ''), @api_key, @logger)
   end
 
   protected
@@ -67,7 +74,7 @@ class TmdbProfile
       @movie = from_xml(open(@filespec).read)
     elsif !@imdb_id.blank?
       @logger.debug { "loading movie from tmdb.com, filespec=> #{@filespec.inspect}" }
-      @movie = TmdbMovie.new(@imdb_id.gsub(/^tt/, ''), @api_key).to_hash
+      @movie = TmdbMovie.new(@imdb_id.gsub(/^tt/, ''), @api_key, @logger).to_hash
       save(@filespec) unless @filespec.blank?
     end
     unless @movie.blank?

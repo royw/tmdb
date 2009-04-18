@@ -8,11 +8,12 @@ TMDB_API_KEY = '7a2f6eb9b6aa01651000f0a9324db835'
 describe "TmdbMovie" do
 
   before(:all) do
+    @logger = nil
     File.mkdirs(TMPDIR)
   end
 
   before(:each) do
-    @profile = TmdbMovie.new('tt0465234', TMDB_API_KEY)
+    @profile = TmdbMovie.new('tt0465234', TMDB_API_KEY, @logger)
   end
 
   after(:each) do
@@ -68,7 +69,7 @@ describe "TmdbMovie" do
   end
 
   it "should handle The Sand Pebble" do
-    profile = TmdbMovie.new('tt0060934', TMDB_API_KEY)
+    profile = TmdbMovie.new('tt0060934', TMDB_API_KEY, @logger)
     profile.idents.should be_nil
   end
 

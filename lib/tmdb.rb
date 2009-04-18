@@ -8,6 +8,7 @@ require 'xmlsimple'
 
 require 'tmdb/optional_logger'
 require 'tmdb/tmdb_movie'
+require 'tmdb/tmdb_image'
 require 'tmdb/tmdb_profile'
 require 'module_extensions'
 require 'string_extensions'

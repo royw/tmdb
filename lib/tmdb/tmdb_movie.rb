@@ -2,9 +2,15 @@ class TmdbMovie
 
   attr_reader :query, :document
 
-  def initialize(ident, key)
+  def initialize(ident, key, logger)
     @imdb_id = 'tt' + ident.gsub(/^tt/, '') unless ident.blank?
+    @api_key = key
     @query = "http://api.themoviedb.org/2.0/Movie.imdbLookup?imdb_id=#{@imdb_id}&api_key=#{key}"
+    @logger = OptionalLogger.new(logger)
+  end
+
+  def image
+    TmdbImage.new(@imdb_id, @api_key, @logger)
   end
 
   def fanarts
@@ -100,7 +106,7 @@ class TmdbMovie
     # Fetch the document with retry to handle the occasional glitches
   def document
     if @document.nil?
-      html = fetch(self.query)
+      html = fetch(self.query.escape_unicode)
       @document = XmlSimple.xml_in(html)
       @document = nil if @document['totalResults'] == ['0']
     end
