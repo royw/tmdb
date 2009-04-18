@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{tmdb}
-  s.version = "0.1.1"
+  s.version = "0.1.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Roy Wright"]
@@ -27,6 +27,9 @@ Gem::Specification.new do |s|
     "lib/tmdb/tmdb_movie.rb",
     "lib/tmdb/tmdb_profile.rb",
     "spec/cache_extensions.rb",
+    "spec/samples/api.themoviedb.org/2.0/Movie.imdbLookup?imdb_id=tt0060934&api_key=7a2f6eb9b6aa01651000f0a9324db835",
+    "spec/samples/api.themoviedb.org/2.0/Movie.imdbLookup?imdb_id=tt0465234&api_key=7a2f6eb9b6aa01651000f0a9324db835",
+    "spec/samples/www.themoviedb.org/image/backdrops/14621/National_Treasure_-_Book_Of_Secrets__XVID___2007_-fanart.jpg",
     "spec/spec_helper.rb",
     "spec/tmdb_image_spec.rb",
     "spec/tmdb_movie_spec.rb",
