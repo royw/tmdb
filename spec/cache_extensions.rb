@@ -3,7 +3,7 @@
 # override the classes' read_page method and replace with one
 # that will cache pages in spec/samples/{url}
 
-class ImdbMovie
+class TmdbMovie
   private
   def read_page(page)
     html = nil
@@ -32,7 +32,7 @@ class ImdbMovie
   end
 end
 
-class ImdbSearch
+class TmdbSearch
   private
   def read_page(page)
     html = nil
@@ -61,11 +61,11 @@ class ImdbSearch
   end
 end
 
-class ImdbImage
+class TmdbImage
   private
   def read_page(page)
     html = nil
-    filespec = page.gsub(/^http:\//, 'spec/samples').gsub(/\/$/, '.html')
+    filespec = page.gsub(/^http:\//, 'spec/samples')
     if File.exist?(filespec)
       html = open(filespec).read
     else
@@ -78,7 +78,7 @@ class ImdbImage
   # this is used to save imdb pages so they may be used by rspec
   def cache_html_files(page, html)
     begin
-      filespec = page.gsub(/^http:\//, 'spec/samples').gsub(/\/$/, '.html')
+      filespec = page.gsub(/^http:\//, 'spec/samples')
       unless File.exist?(filespec)
         puts "caching #{filespec}"
         File.mkdirs(File.dirname(filespec))
