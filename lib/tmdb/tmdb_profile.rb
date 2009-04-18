@@ -37,7 +37,7 @@ class TmdbProfile
   end
 
   def initialize(ident, key, filespec, logger)
-    @imdb_id = ident
+    @imdb_id = 'tt' + ident.gsub(/^tt/, '') unless ident.blank?
     @api_key = key
     @filespec = filespec
     @logger = OptionalLogger.new(logger)
@@ -62,7 +62,7 @@ class TmdbProfile
 
   # return the TmdbImage for this profile
   def image
-    TmdbImage.new(@imdb_id.gsub(/^tt/, ''), @api_key, @logger)
+    TmdbImage.new(@imdb_id.gsub(/^tt/, ''), @api_key, @logger) rescue nil
   end
 
   protected

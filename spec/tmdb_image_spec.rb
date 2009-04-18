@@ -30,11 +30,11 @@ describe "TmdbImage" do
 
   it "should find image via profile" do
     profile = TmdbProfile.first(:imdb_id => 'tt0465234', :api_key => TMDB_API_KEY, :logger => @logger)
-    profile.image.imdb_id.should == '0465234'
+    profile.image.imdb_id.should == 'tt0465234'
   end
 
   it "should find image via movie" do
-    profile = TmdbMovie.new('tt0465234', TMDB_API_KEY, @logger)
+    profile = TmdbMovie.new('0465234', TMDB_API_KEY, @logger)
     profile.image.imdb_id.should == 'tt0465234'
   end
 

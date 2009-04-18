@@ -4,8 +4,8 @@ class TmdbImage
   # imdb_id => String IMDB ID either with or without the 'tt' prefix
   # api_key => String containing the themovieDb.com API key
   # logger => nil or logger instance
-  def initialize(imdb_id, api_key, logger)
-    @imdb_id = imdb_id
+  def initialize(ident, api_key, logger)
+    @imdb_id = 'tt' + ident.gsub(/^tt/, '') unless ident.blank?
     @api_key = api_key
     @logger = OptionalLogger.new(logger)
   end

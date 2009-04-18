@@ -10,7 +10,7 @@ class TmdbMovie
   end
 
   def image
-    TmdbImage.new(@imdb_id, @api_key, @logger)
+    TmdbImage.new(@imdb_id.gsub(/^tt/, ''), @api_key, @logger) rescue nil
   end
 
   def fanarts
