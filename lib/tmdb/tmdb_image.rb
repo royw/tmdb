@@ -100,10 +100,13 @@ class TmdbImage
       unless movie[type].blank?
         images = movie[type]
         images.each do |image|
-          if image['size'] == size
+          image_size = image['size']
+          image_size = image_size.first if image_size.respond_to?('first')
+          if image_size == size
             @logger.debug { "#{image.inspect}" }
             src_url = image['content']
           end
+          break unless src_url.blank?
         end
       end
     end
@@ -113,6 +116,7 @@ class TmdbImage
   # download the fanart
   # returns nil if no attempt to copy was made, 0 on error, or the image size in bytes on success
   def copy_image(src_url, dest_filespec)
+    @logger.debug { "copy_image(#{src_url}, #{dest_filespec})" }
     image_size = nil
     unless src_url.blank? || dest_filespec.blank?
       begin
