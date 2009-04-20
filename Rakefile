@@ -11,6 +11,7 @@ begin
     gem.authors = ["Roy Wright"]
 
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
+    gem.add_dependency('royw-read_page_cache','>= 0.0.1')
   end
 rescue LoadError
   puts "Jeweler not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com"
@@ -44,5 +45,10 @@ Rake::RDocTask.new do |rdoc|
   rdoc.title = "tmdb #{version}"
   rdoc.rdoc_files.include('README*')
   rdoc.rdoc_files.include('lib/**/*.rb')
+end
+
+desc "stalk github until gem is published"
+task :stalk do
+  `gemstalk royw tmdb`
 end
 
