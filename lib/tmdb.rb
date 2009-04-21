@@ -6,11 +6,11 @@ require 'open-uri'
 require 'date'
 require 'xmlsimple'
 
+# royw gems on github
+require 'roys_extensions'
+
+# local files
 require 'tmdb/optional_logger'
 require 'tmdb/tmdb_movie'
 require 'tmdb/tmdb_image'
 require 'tmdb/tmdb_profile'
-require 'module_extensions'
-require 'string_extensions'
-require 'file_extensions'
-require 'object_extensions'
